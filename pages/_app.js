@@ -1,7 +1,29 @@
-import '../styles/globals.css'
+import { ChakraProvider }     from "@chakra-ui/core";
+import { UseWalletProvider }  from "use-wallet";
+import Layout                 from "../components/layout";
+import theme                  from "../theme";
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
-}
+const fakeStorageManager = {
+  get: () => "dark",
+  set: (value) => {},
+  type: "cookie",
+};
 
-export default MyApp
+const App = ({ Component, pageProps }) => {
+  return (
+    <UseWalletProvider
+      chainId={42}
+      connectors={{
+        walletconnect: { rpcUrl: "https://mainnet.eth.aragon.network/" },
+      }}
+    >
+      <ChakraProvider theme={theme} colorModeManager={fakeStorageManager}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ChakraProvider>
+    </UseWalletProvider>
+  )
+};
+
+export default App;
