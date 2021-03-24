@@ -1,5 +1,7 @@
-import { ChakraProvider }     from "@chakra-ui/core";
 import { UseWalletProvider }  from "use-wallet";
+import { ApolloProvider }     from '@apollo/client';
+import { ChakraProvider }     from "@chakra-ui/core";
+import { useApollo }          from "../apollo/client";
 import Layout                 from "../components/layout";
 import theme                  from "../theme";
 
@@ -10,18 +12,21 @@ const fakeStorageManager = {
 };
 
 const App = ({ Component, pageProps }) => {
+  const apolloClient = useApollo({});
   return (
     <UseWalletProvider
-      chainId={42}
+      chainId={1}
       connectors={{
         walletconnect: { rpcUrl: "https://mainnet.eth.aragon.network/" },
       }}
     >
-      <ChakraProvider theme={theme} colorModeManager={fakeStorageManager}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ChakraProvider>
+      <ApolloProvider client={apolloClient}>
+        <ChakraProvider theme={theme} colorModeManager={fakeStorageManager}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ChakraProvider>
+      </ApolloProvider>
     </UseWalletProvider>
   )
 };
