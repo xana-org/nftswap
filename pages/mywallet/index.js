@@ -10,7 +10,7 @@ import NFTBalanceCard                   from "../../components/nftcard";
 import { SUPPORT_ERC20_TOKEN, CHAIN }   from "../../constants/addresses";
 import { useTokenBalance }              from "../../apollo/query";
 import { getWalletAddress }             from "../../lib/wallet";
-
+import { getAllAssets }                 from "../../opensea/api";
 const MyWallet = () => {
     // define hooks
     const wallet = useWallet();
@@ -18,13 +18,21 @@ const MyWallet = () => {
     const { loading, error, data } = useTokenBalance(walletAddress, 1000);
     const erc20Balances = SUPPORT_ERC20_TOKEN[CHAIN];
     const [tokenHolders, setTokenHolders] = useState([]);
-
     // define functions
     useEffect(() => {
+        console.log(data, loading, error);
       if (data && data.tokenHolders && data.tokenHolders.length) {
-        setTokenHolders(data.tokenHolders);
+    //    setTokenHolders(data.tokenHolders);
       }
     }, [loading, error, data]);
+    
+    // get All NFTs using opeansea api
+    useEffect(() => {
+        getAllAssets(walletAddress).then(res => {
+            console.log(res, "opensea");
+            setTokenHolders(res.assets);
+        })
+    }, [])
     return (
         <Box w="100%">
             <Box 
