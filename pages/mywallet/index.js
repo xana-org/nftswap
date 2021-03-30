@@ -1,9 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useWallet } from "use-wallet";
 import {
     Box,
     Text,
     SimpleGrid,
+    Button,
+    Spinner,
+    Flex
 } from "@chakra-ui/core";
 import TokenBalanceCard                 from "../../components/tokencard";
 import NFTBalanceCard                   from "../../components/nftcard";
@@ -11,6 +14,8 @@ import { SUPPORT_ERC20_TOKEN, CHAIN }   from "../../constants/addresses";
 import { useTokenBalance }              from "../../apollo/query";
 import { getWalletAddress }             from "../../lib/wallet";
 import { getAllAssets }                 from "../../opensea/api";
+const PAGE_SIZE = 50;
+
 const MyWallet = () => {
     // define hooks
     const wallet = useWallet();
@@ -18,6 +23,8 @@ const MyWallet = () => {
     const { loading, error, data } = useTokenBalance(walletAddress, 1000);
     const erc20Balances = SUPPORT_ERC20_TOKEN[CHAIN];
     const [tokenHolders, setTokenHolders] = useState([]);
+    const [tokenOffset, setTokenOffset] = useState(0);
+    const [tokenLoading, setTokenLoading] = useState(false);
     // define functions
     useEffect(() => {
         console.log(data, loading, error);
@@ -28,11 +35,29 @@ const MyWallet = () => {
     
     // get All NFTs using opeansea api
     useEffect(() => {
-        getAllAssets(walletAddress).then(res => {
-            console.log(res, "opensea");
-            setTokenHolders(res.assets);
-        })
+        loadTokens();
     }, [])
+
+    const loadTokens = () => {
+        setTokenLoading(true); //0x64dcbead3b25b94c1c07158c8a6ad6517b95513e
+        getAllAssets(walletAddress, tokenOffset, PAGE_SIZE).then(res => {
+            console.log(res, "opensea");
+            setTokenLoading(false);
+            const newTokens = [...tokenHolders, ...res.assets];
+            setTokenHolders(newTokens);
+            if (res.assets.length < PAGE_SIZE)
+                setTokenOffset(-1);
+            else
+                setTokenOffset(tokenOffset + PAGE_SIZE);
+        })
+
+    }
+    const onLoadMore = () => {
+        if (tokenLoading)
+            return;
+        loadTokens();
+    }
+
     return (
         <Box w="100%">
             <Box 
@@ -84,9 +109,12 @@ const MyWallet = () => {
                             />
                         )
                     })}
-                    <Box/>
-                    <Box/>
                 </SimpleGrid>
+                {tokenOffset != -1 && <Flex mt="1rem" justifyContent="center" alignItems="center">
+                    <Button colorScheme="teal" variant="solid" size="lg" onClick={onLoadMore}>
+                        {tokenLoading ? <Spinner/> : "Load More"}
+                    </Button>
+                </Flex>}
             </Box>
         </Box>
     );
