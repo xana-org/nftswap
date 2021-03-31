@@ -52,7 +52,7 @@ const NFTBalanceCard = (props) => {
     }
 
     return (
-        <Box w="100%" bg="blue.800" p="1rem" borderRadius="10px">
+        <Box w="100%" bg="blue.900" p="1rem" borderRadius="10px">
             <Box w="100%" borderBottom="1px solid white" pb="1rem" >
                 <Center w="100%">
                     <Image height="120px"

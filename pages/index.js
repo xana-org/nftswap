@@ -25,6 +25,9 @@ import {
   ChevronDownIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
+  ArrowUpDownIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
   CloseIcon
 } from "@chakra-ui/icons";
 import InfiniteScroll                from "react-infinite-scroller";
@@ -169,8 +172,13 @@ const Home = () => {
         >
           Select the NFTs and amounts for your trade
         </Text>
-        <Flex flexDirection="row" justifyContent="center">
-          <Flex w="40%" flexDirection="column">
+        <Stack
+          spacing={8}
+          justify={["flex-start", "flex-start", "center", "center"]}
+          direction={["column", "row", "row", "row"]}
+          pt={[4, 4, 0, 0]}
+          >
+          <Flex flexDirection="column">
             <Text
               textAlign="right"
               fontSize="26px"
@@ -186,12 +194,21 @@ const Home = () => {
             </RadioGroup>
             {renderLeftToken()}
           </Flex>
-          <Flex m="auto 5rem" flexDirection="column">
-            <ArrowLeftIcon m="0.2rem"/>
-            <ArrowRightIcon m="0.2rem"/>
-          </Flex>
-          <Box w="40%">
+          <Box display={{ base: 'none', md: 'block' }} mb="auto" mt="auto">
+            <Flex flexDirection="column">
+              <ArrowLeftIcon m="0.2rem"/>
+              <ArrowRightIcon m="0.2rem"/>
+            </Flex>
+          </Box>
+          <Box display={{ base: 'block', md: 'none' }}>
+            <Flex justify="center" align="center" flexDirection="row">
+              <ArrowUpIcon/>
+              <ArrowDownIcon/>
+            </Flex>
+          </Box>
+          <Box>
             <Text
+              textAlign="right"
               fontSize="26px"
               fontWeight="bold"
             >
@@ -199,7 +216,7 @@ const Home = () => {
             </Text>
 
           </Box>
-        </Flex>
+        </Stack>
       </Box>
       <Box
           boxShadow="0 2px 13px 0 rgba(0, 0, 0, 0.21)"

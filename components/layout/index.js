@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
           flexDirection="column" 
           margin="0 auto"
           maxW="70rem"
-          p="0 1rem"
+          p="0"
         >
           <Header/>
           {isWalletConnected(wallet) ? <Main>{children}</Main> : <NoConnection/>}
