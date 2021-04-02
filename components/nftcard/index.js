@@ -18,9 +18,6 @@ import {
 
 const NFTBalanceCard = (props) => {
     // define hooks
-    const amount = parseInt(props.amount);
-    const tokenId = parseInt(props.tokenId);
-    const contractAddress = props.contractAddress;
     const token = props.token;
     const {collection, last_sale, sell_orders} = token;
     let currentPrice = null;
@@ -44,15 +41,21 @@ const NFTBalanceCard = (props) => {
     }
     
     // define functions
-    const openTokenLink = (address) => {
-        if (CHAIN === "mainnet")
-            window.open("https://etherscan.io/address/" + address);
-        else if (CHAIN === "rinkeby")
-            window.open("https://rinkeby.etherscan.io/address/" + address);
+    const openTokenLink = () => {
+        window.open(token.permalink);
     }
 
     return (
-        <Box w="100%" bg="blue.900" p="1rem" borderRadius="10px">
+        <Box w="100%"
+            bg="blue.900"
+            p="1rem"
+            borderRadius="10px"
+            cursor="pointer"
+            userSelect="none"
+            maxW="350px"
+            onClick={openTokenLink}
+            _hover={{ bg: "blue.800", boxShadow: "2xl"}}
+            >
             <Box w="100%" borderBottom="1px solid white" pb="1rem" >
                 <Center w="100%">
                     <Image height="120px"

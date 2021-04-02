@@ -40,7 +40,7 @@ const MyWallet = () => {
 
     const loadTokens = () => {
         setTokenLoading(true); //0x64dcbead3b25b94c1c07158c8a6ad6517b95513e
-        getAllAssets("0x64dcbead3b25b94c1c07158c8a6ad6517b95513e", tokenOffset, PAGE_SIZE).then(res => {
+        getAllAssets(walletAddress, tokenOffset, PAGE_SIZE).then(res => {
             console.log(res, "opensea");
             setTokenLoading(false);
             const newTokens = [...tokenHolders, ...res.assets];
