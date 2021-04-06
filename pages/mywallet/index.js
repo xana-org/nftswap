@@ -27,7 +27,6 @@ const MyWallet = () => {
     const [tokenLoading, setTokenLoading] = useState(false);
     // define functions
     useEffect(() => {
-        console.log(data, loading, error);
       if (data && data.tokenHolders && data.tokenHolders.length) {
     //    setTokenHolders(data.tokenHolders);
       }
@@ -84,6 +83,8 @@ const MyWallet = () => {
                             />
                         )
                     })}
+                    <Box/>
+                    <Box/>
                 </SimpleGrid>
             </Box>
             <Box

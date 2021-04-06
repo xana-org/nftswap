@@ -41,7 +41,7 @@ const Home = () => {
   const [type_left, setTypeLeft] = useState("l_erc20");
   const [tokenList, setTokenList] = useState([]);
   const [filteredTokenList, setFilteredTokenList] = useState([]);
-  const [lefToken, setLeftToken] = useState(LEFT_TOKEN);
+  const [lefToken, setLeftToken] = useState(LEFT_TOKEN[4]);
   const [balance, setBalance] = useState(-1);
   const [isOpenERC20, setIsOpenERC20] = useState(false);
   const [tokenShowCount, setTokenShowCount] = useState(30);
@@ -103,6 +103,34 @@ const Home = () => {
     )
   }
 
+  const renderRightToken = () => {
+    return (
+      <Box mt="1rem" ml="auto" w="100%">
+        <Flex flexDirection="row">
+          <Flex flexDirection="row" cursor="pointer" userSelect="none">
+            <Box w="3.4rem" h="3.4rem" m="auto .5rem" borderRadius="100%" bg="blue.800" onClick={() => {setIsOpenERC20(true)}}>
+              <Image src={lefToken.logoURI} w="2rem" h="2rem" m="0.7rem"/>
+            </Box>
+            <Flex flexDirection="row" onClick={() => {setIsOpenERC20(true)}}>
+              <Text fontSize="24px" fontWeight="bold" m="auto 0">{lefToken.symbol}</Text>
+              <ChevronDownIcon m="auto 0.4rem"/>
+            </Flex>
+            <NumberInput w="100px" m="auto 0">
+              <NumberInputField/>
+            </NumberInput>
+          </Flex>
+        </Flex>
+        <Flex flexDirection="row">
+          <Text >Balance: </Text>
+          {balance === -1 ?
+              <Spinner m="auto 1rem" size="sm"/>:
+              <Text pl="1rem">{balance}</Text>
+          } 
+        </Flex>
+      </Box>
+    )
+  }
+
   const onOpenTokenLink = async (e, addr) => {
     e.preventDefault();
     e.stopPropagation();
@@ -110,6 +138,8 @@ const Home = () => {
     const network = await ethersProvider._networkPromise;
     if (network.chainId === 1) {
       window.open("https://etherscan.io/address/" + addr);
+    }else if (network.chainId === 4) {
+      window.open("https://rinkeby.etherscan.io/address/" + addr);
     }
   }
 
@@ -197,7 +227,13 @@ const Home = () => {
             >
               You'll receive
             </Text>
-
+            <RadioGroup onChange={setTypeLeft} value={type_left} mt="1rem" >
+              <Stack direction="row">
+                <Radio value="l_erc20" mr="1rem" _before={{color: "white"}}>ERC20</Radio>
+                <Radio value="l_nft" _before={{color: "white"}}>NFT</Radio>
+              </Stack>
+            </RadioGroup>
+            {renderRightToken()}
           </Box>
         </Flex>
       </Box>

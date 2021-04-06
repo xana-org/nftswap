@@ -1,6 +1,6 @@
-const CHAIN = "mainnet";
+const CHAIN = 4;
 const SUPPORT_ERC20_TOKEN = {
-    "mainnet": [
+    1: [
         {
             name: "WETH",
             address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -9,7 +9,7 @@ const SUPPORT_ERC20_TOKEN = {
         {
             name: "ZORA",
             address: "0xd8e3fb3b08eba982f2754988d70d57edc0055ae6",
-            decimals: 18,
+            decimals: 9,
         },
         {
             name: "DAI",
@@ -32,8 +32,12 @@ const SUPPORT_ERC20_TOKEN = {
             decimals: 18,
         },
     ],
-    "rinkeby": [
-        
+    4: [
+        {
+            name: "ZORA",
+            address: "0x64bFa0e3E5ebE7E8bF7d4bFb2Bb1FB7Ae109d18b",
+            decimals: 9,
+        },        
     ]
 }
 

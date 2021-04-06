@@ -15,7 +15,7 @@ const App = ({ Component, pageProps }) => {
   const apolloClient = useApollo({});
   return (
     <UseWalletProvider
-      chainId={1}
+      chainId={4}
       connectors={{
         walletconnect: { rpcUrl: "https://mainnet.eth.aragon.network/" },
       }}
