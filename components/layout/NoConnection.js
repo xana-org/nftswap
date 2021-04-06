@@ -1,7 +1,8 @@
 import { Box, Text } from "@chakra-ui/core";
 const NoConnection = () => {
     return (        
-        <Box w="100%">
+        <Box w="100%"
+        p="2rem 1rem">
             <Box 
                 w="100%"
                 bg="yellow.900"

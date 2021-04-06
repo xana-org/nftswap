@@ -112,7 +112,7 @@ const MyWallet = () => {
                     })}
                 </SimpleGrid>
                 {tokenOffset != -1 && <Flex mt="1rem" justifyContent="center" alignItems="center">
-                    <Button colorScheme="teal" variant="solid" size="lg" onClick={onLoadMore}>
+                    <Button colorScheme="blue" color="white" variant="solid" size="lg" onClick={onLoadMore}>
                         {tokenLoading ? <Spinner/> : "Load More"}
                     </Button>
                 </Flex>}
