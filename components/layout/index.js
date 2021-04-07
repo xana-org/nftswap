@@ -30,7 +30,6 @@ const Layout = ({ children }) => {
         <Flex 
           w="100%"
           h="100vh"
-          overflow="auto"
           flexDirection="column" 
           margin="0 auto"
           maxW="70rem"

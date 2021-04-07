@@ -1,4 +1,4 @@
-const api_address = 'https://api.opensea.io/api/v1';
+const api_address = 'https://testnets-api.opensea.io/api/v1';
 
 export const getAllAssets = (address, offset = 0, limit = 50) => {
     const options = {method: 'GET'};

@@ -14,7 +14,7 @@ import { SUPPORT_ERC20_TOKEN, CHAIN }   from "../../constants/addresses";
 import { useTokenBalance }              from "../../apollo/query";
 import { getWalletAddress }             from "../../lib/wallet";
 import { getAllAssets }                 from "../../opensea/api";
-const PAGE_SIZE = 50;
+import { PAGE_SIZE }                    from "../../constants/const";
 
 const MyWallet = () => {
     // define hooks
@@ -25,6 +25,7 @@ const MyWallet = () => {
     const [tokenHolders, setTokenHolders] = useState([]);
     const [tokenOffset, setTokenOffset] = useState(0);
     const [tokenLoading, setTokenLoading] = useState(false);
+
     // define functions
     useEffect(() => {
       if (data && data.tokenHolders && data.tokenHolders.length) {
@@ -35,7 +36,7 @@ const MyWallet = () => {
     // get All NFTs using opeansea api
     useEffect(() => {
         loadTokens();
-    }, [])
+    }, []);
 
     const loadTokens = () => {
         setTokenLoading(true); //0x64dcbead3b25b94c1c07158c8a6ad6517b95513e
@@ -48,9 +49,9 @@ const MyWallet = () => {
                 setTokenOffset(-1);
             else
                 setTokenOffset(tokenOffset + PAGE_SIZE);
-        })
-
+        });
     }
+
     const onLoadMore = () => {
         if (tokenLoading)
             return;
@@ -107,6 +108,7 @@ const MyWallet = () => {
                             <NFTBalanceCard
                                 key={index}
                                 token={item}
+                                redirect={true}
                             />
                         )
                     })}

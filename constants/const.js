@@ -1,5 +1,5 @@
 export const COINGECKO_URL = "https://tokens.coingecko.com/uniswap/all.json";
-export const LEFT_TOKEN = {
+export const RIGHT_TOKEN = {
     1: {
         type: 0,
         logoURI: "https://assets.coingecko.com/coins/images/13255/thumb/zora.png",
@@ -17,3 +17,4 @@ export const LEFT_TOKEN = {
         address: "0x64bFa0e3E5ebE7E8bF7d4bFb2Bb1FB7Ae109d18b"
     }
 }
+export const PAGE_SIZE = 50;
