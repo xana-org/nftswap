@@ -70,9 +70,11 @@ export const MenuLinks = ({isOpen, setIsOpen}) => {
                 justify={["center", "space-between", "flex-end", "flex-end"]}
                 direction={["column", "row", "row", "row"]}
                 pt={[4, 4, 0, 0]}
-                >
+                fontSize="14px"
+                fontWeight="bold"
+            >
                 <MenuItem to="/">Create</MenuItem>
-                <MenuItem to="/">Swap List</MenuItem>
+                <MenuItem to="/list">Swap List</MenuItem>
                 <MenuItem to="/mywallet">My Wallet</MenuItem>
                 {renderWallet()}
             </Stack>

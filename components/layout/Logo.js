@@ -9,6 +9,7 @@ export default function Logo(props) {
             fontWeight="bold"
             fontSize="18px"
             color="black"
+            minW="300px"
         >
             Zoracles - NFTSwap
         </Text>

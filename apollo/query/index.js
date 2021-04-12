@@ -1,22 +1,29 @@
 import { gql, useQuery } from '@apollo/client';
 
-const TOKEN_BALANCE = gql`
-  query tokenBalanceQuery($holderAddress: String, $first: Int) {
-    tokenHolders(first: $first, where: { holderAddress: $holderAddress }) {
-      tokenId
-      contractAddress
-      amount
+const SWAP_LISTS = gql`
+  query swapListsQuery($first: Int) {
+    swapLists(first: $first) {
+      id
+      sellerTokenAddr
+      sellerTokenId
+      sellerTokenAmount
+      sellerTokenType
+      buyerTokenAddr
+      buyerTokenId
+      buyerTokenType
+      buyerTokenAmount
+      isActive
+      leftAmount
     }
   }
 `;
 
-export const useTokenBalance = (holderAddress, first) => {
+export const getSwapList = (first) => {
   const variables = {
-    holderAddress,
     first,
   };
 
-  return useQuery(TOKEN_BALANCE, {
+  return useQuery(SWAP_LISTS, {
     variables,
     notifyOnNetworkStatusChange: true,
   });

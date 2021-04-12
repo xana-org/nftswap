@@ -1,0 +1,378 @@
+[
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "ZORA_DECIMALS",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "listId",
+                "type": "uint256"
+            }
+        ],
+        "name": "closeList",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "emergencyStop",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "sellerTokenAddr",
+                "type": "address"
+            },
+            {
+                "name": "sellerTokenId",
+                "type": "uint256"
+            },
+            {
+                "name": "sellerTokenAmount",
+                "type": "uint256"
+            },
+            {
+                "name": "sellerTokenType",
+                "type": "uint256"
+            },
+            {
+                "name": "buyerTokenAddr",
+                "type": "address"
+            },
+            {
+                "name": "buyerTokenId",
+                "type": "uint256"
+            },
+            {
+                "name": "buyerTokenAmount",
+                "type": "uint256"
+            },
+            {
+                "name": "buyerTokenType",
+                "type": "uint256"
+            }
+        ],
+        "name": "createSwap",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "listId",
+                "type": "uint256"
+            },
+            {
+                "name": "tokenAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "swapNFT",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "isOwner",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "stopEmergency",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "listIndex",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "feeCollector",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "ZORA",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "clearEmergency",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "swapList",
+        "outputs": [
+            {
+                "name": "sellerAddr",
+                "type": "address"
+            },
+            {
+                "name": "sellerTokenAddr",
+                "type": "address"
+            },
+            {
+                "name": "sellerTokenId",
+                "type": "uint256"
+            },
+            {
+                "name": "sellerTokenAmount",
+                "type": "uint256"
+            },
+            {
+                "name": "sellerTokenType",
+                "type": "uint8"
+            },
+            {
+                "name": "buyerTokenAddr",
+                "type": "address"
+            },
+            {
+                "name": "buyerTokenId",
+                "type": "uint256"
+            },
+            {
+                "name": "buyerTokenAmount",
+                "type": "uint256"
+            },
+            {
+                "name": "buyerTokenType",
+                "type": "uint8"
+            },
+            {
+                "name": "leftAmount",
+                "type": "uint256"
+            },
+            {
+                "name": "isActive",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "listIndex",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "sellerTokenAddr",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "sellerTokenId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "sellerTokenAmount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "sellerTokenType",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "buyerTokenAddr",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "buyerTokenId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "buyerTokenAmount",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "buyerTokenType",
+                "type": "uint256"
+            }
+        ],
+        "name": "SwapCreated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "listIndex",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "leftAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "NFTSwapped",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "listIndex",
+                "type": "uint256"
+            }
+        ],
+        "name": "SwapClosed",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "previousOwner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    }
+]

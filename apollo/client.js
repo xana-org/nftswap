@@ -6,10 +6,10 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 let apolloClient;
 
 const GRAPHQL_HTTP_ENDPINT =
-  'https://api.thegraph.com/subgraphs/name/bondly/nftswap';
+  'https://api.thegraph.com/subgraphs/name/cryptodev7/zoranftswap';
 
 const GRAPHQL_WSS_ENDPOINT =
-  'wss://api.thegraph.com/subgraphs/name/bondly/nftswap';
+  'wss://api.thegraph.com/subgraphs/name/cryptodev7/zoranftswap';
 
 const httpLink = new HttpLink({
   uri: GRAPHQL_HTTP_ENDPINT,

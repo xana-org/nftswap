@@ -9,3 +9,15 @@ export async function getBalance(coinAddress, address, provider) {
     const balance = await erc20.balanceOf(address);
     return balance.toString();
 }
+
+export async function getTokenSymbol(coinAddress, signer) {
+    const erc20 = new ethers.Contract(coinAddress, abi, signer);
+    const symbol = erc20.symbol();
+    return symbol;
+}
+
+export async function getDecimals(coinAddress, signer) {
+    const erc20 = new ethers.Contract(coinAddress, abi, signer);
+    const decimals = erc20.decimals();
+    return decimals;
+}
