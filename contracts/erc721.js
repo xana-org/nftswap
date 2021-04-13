@@ -21,8 +21,8 @@ export async function getURI721(contractAddr, id, signer) {
     }
 }
 
-export async function getBalance721(contractAddr, userAddr, signer) {
+export async function getBalance721(contractAddr, userAddr, id, signer) {
     const erc721 = new ethers.Contract(contractAddr, abi, signer);
-    const balance = await erc721.balanceOf(userAddr);
-    return parseInt(balance.toString());
+    const ownerAddr = await erc721.ownerOf(id);
+    return ownerAddr.toLowerCase() === userAddr.toLowerCase() ? 1 : 0;
 }

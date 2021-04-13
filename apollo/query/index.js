@@ -4,6 +4,7 @@ const SWAP_LISTS = gql`
   query swapListsQuery($first: Int) {
     swapLists(first: $first) {
       id
+      sellerAddr
       sellerTokenAddr
       sellerTokenId
       sellerTokenAmount
@@ -35,6 +36,7 @@ const GET_SWAP = gql`
       id: $id
     }) {
       id
+      sellerAddr
       sellerTokenAddr
       sellerTokenId
       sellerTokenAmount

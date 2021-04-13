@@ -287,6 +287,11 @@
             },
             {
                 "indexed": false,
+                "name": "sellerAddr",
+                "type": "address"
+            },
+            {
+                "indexed": false,
                 "name": "sellerTokenAddr",
                 "type": "address"
             },

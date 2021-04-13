@@ -17,53 +17,65 @@ function calcFee(zoraBalance) {
     return "0.05";
 }
 export async function createSwap(
-        sellerTokenAddr,
-        sellerTokenId,
-        sellerTokenAmount,
-        sellerTokenType,
-        buyerTokenAddr,
-        buyerTokenId,
-        buyerTokenAmount,
-        buyerTokenType,
-        zoraBalance,
-        signer,
-    ) {
-    console.log(
-        sellerTokenAddr,
-        sellerTokenId,
-        sellerTokenAmount,
-        sellerTokenType,
-        buyerTokenAddr,
-        buyerTokenId,
-        buyerTokenAmount,
-        "bT: " + buyerTokenType,
-        zoraBalance,
-    )
-    const zoraswap = new ethers.Contract(ZORA_SWAP, abi, signer);
-    if (!zoraswap) {
-        return '';
+    sellerTokenAddr,
+    sellerTokenId,
+    sellerTokenAmount,
+    sellerTokenType,
+    buyerTokenAddr,
+    buyerTokenId,
+    buyerTokenAmount,
+    buyerTokenType,
+    zoraBalance,
+    signer,
+  ) {
+  const zoraswap = new ethers.Contract(ZORA_SWAP, abi, signer);
+  if (!zoraswap) {
+      return '';
+  }
+  const fee = calcFee(zoraBalance);
+  const { hash } = await zoraswap.createSwap(
+    sellerTokenAddr,
+    sellerTokenId,
+    sellerTokenAmount,
+    sellerTokenType,
+    buyerTokenAddr,
+    buyerTokenId,
+    buyerTokenAmount,
+    buyerTokenType,
+    { value: ethers.utils.parseEther(fee)}
+  );
+  try {
+    while (true) {
+      let mined = await isTransactionMined(hash);
+      if (mined) break;
     }
-    const fee = calcFee(zoraBalance);
-    console.log("Fee: ", fee);
-    const { hash } = await zoraswap.createSwap(
-        sellerTokenAddr,
-        sellerTokenId,
-        sellerTokenAmount,
-        sellerTokenType,
-        buyerTokenAddr,
-        buyerTokenId,
-        buyerTokenAmount,
-        buyerTokenType,
-        { value: ethers.utils.parseEther(fee)}
-    );
-    try {
-        while (true) {
-          let mined = await isTransactionMined(hash);
-          if (mined) break;
-        }
-      } catch (e) {
-        console.error(e);
-        return "";
-      }
-      return hash;
+  } catch (e) {
+    console.error(e);
+    return "";
+  }
+  return hash;
+}
+
+export async function swapNFT(listId, batchCount, zoraBalance, signer) {
+  const zoraswap = new ethers.Contract(ZORA_SWAP, abi, signer);
+  if (!zoraswap) {
+      return '';
+  }
+
+  const fee = calcFee(zoraBalance);
+  const { hash } = await zoraswap.swapNFT(
+    listId,
+    batchCount,
+    { value: ethers.utils.parseEther(fee)}
+  );
+  try {
+    while (true) {
+      let mined = await isTransactionMined(hash);
+      if (mined) break;
+    }
+  } catch (e) {
+    console.error(e);
+    return "";
+  }
+  return hash;
 }

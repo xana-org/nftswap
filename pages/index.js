@@ -58,9 +58,6 @@ import {
   setApprovalForAll,
   getBalance1155,
 } from "../contracts/erc1155";
-import {
-  getBalance721
-} from "../contracts/erc721";
 
 const Home = () => {
   // define hooks
@@ -150,7 +147,8 @@ const Home = () => {
 
   const getZoraBalance = async () => {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const address = ZORA_TOKEN[4].address;
+    const network = await provider._networkPromise;
+    const address = ZORA_TOKEN[network.chainId].address;
     const decimals = 9;
     const walletAddress = getWalletAddress(wallet);
     let balance = await getBalance(address, walletAddress, provider);
@@ -212,7 +210,6 @@ const Home = () => {
         true,
         signer
       );
-      console.log("approved")
       setLeftTokenApproved(true);
       toast({
         title: "Approve Swap",
