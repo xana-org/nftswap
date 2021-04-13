@@ -23,8 +23,14 @@ const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        wallet.connect("injected");
+      wallet.connect("injected");
     }, [])
+
+    useEffect(() => {
+      if (!wallet.ethereum) {
+        wallet.connect("injected");
+      }
+    }, [wallet])
 
     useEffect(() => {
         const currentConnectionStatus = getWalletConnectionStatus(wallet);

@@ -1,39 +1,34 @@
 import { useEffect, useState }  from "react";
 import { useWallet }            from "use-wallet";
-import { ethers }               from "ethers";
 import { useRouter }            from "next/router";
 import {
-    Flex,
     Box,
-    Image,
     Text,
     Spinner,
-    AspectRatio,
+    Flex
 } from "@chakra-ui/core";
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-} from "@chakra-ui/icons";
-import { formatNumber }         from "../../lib/helper";
-import { CHAIN }                from "../../constants/addresses";
-import { getNFTDetail }         from "../../opensea/api";
-import { getURI1155 }           from "../../contracts/erc1155";
-import { getURI721 }            from "../../contracts/erc721";
-import axios                    from "axios";
-import {
-    getTokenSymbol,
-    getDecimals
-} from "../../contracts/erc20";
+import { getSwap }              from "../../apollo/query";
+import Swap                     from "../../components/swap";
 
 const SwapPage = () => {
     // define hooks
     const router = useRouter();
     const swapId = router.query ? router.query.id : '';
+    const { loading, error, data } = getSwap(swapId);
+    const [swap, setSwap] = useState(null);
+    const [loaded, setLoaded] = useState(false);
 
     // define functions
     useEffect(() => {
         if (!swapId) router.push("/");
     }, []);
+
+    useEffect(() => {
+        if (data && data.swapLists && data.swapLists.length) {
+            setSwap(data.swapLists[0]);
+            setLoaded(true);
+        }
+    }, [loading, error, data]);
 
     return (
         <Box w="100%">
@@ -50,8 +45,24 @@ const SwapPage = () => {
                     fontWeight="bold"
                     pb="1.5rem"
                 >
-                    Swap
+                    Accept Swap
                 </Text>
+                <Text
+                    textAlign="center"
+                    fontSize="18px"
+                    color="gray.300"
+                    pb="2rem"
+                    >
+                    Input quantity you want to get
+                </Text>
+                {loaded?
+                    <Swap
+                        swap={swap}
+                    />:
+                    <Flex flexDirection="row">
+                        <Spinner m="auto"/>
+                    </Flex>
+                }
             </Box>
             <Box
                 boxShadow="0 2px 13px 0 rgba(0, 0, 0, 0.21)"

@@ -36,7 +36,7 @@ const Layout = ({ children }) => {
           p="0"
         >
           <Header/>
-          {isWalletConnected(wallet) ? <Main>{children}</Main> : <NoConnection/>}
+          {isWalletConnected(wallet) && wallet.ethereum ? <Main>{children}</Main> : <NoConnection/>}
         </Flex>
       </Container>
     );
