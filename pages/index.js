@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useWallet }           from "use-wallet";
-import { ethers }              from "ethers";
+import { ethers, BigNumber }   from "ethers";
 import {
     Flex,
     Box,
@@ -58,6 +58,9 @@ import {
   setApprovalForAll,
   getBalance1155,
 } from "../contracts/erc1155";
+import {
+  getCoinInfo
+} from "../contracts/erc20";
 
 const Home = () => {
   // define hooks
@@ -123,7 +126,6 @@ const Home = () => {
         signer
       );
       setLeftTokenApproved(is_L_approved);
-      console.log("LeftToken", leftToken);
       let balance = 1;
       if (leftToken.asset_contract.schema_name === "ERC1155")
         balance = await getBalance1155(leftToken.asset_contract.address, walletAddress, leftToken.token_id, signer);
@@ -203,7 +205,6 @@ const Home = () => {
       const leftToken = mycontext.nftToken;
       const provider = new ethers.providers.Web3Provider(wallet.ethereum);
       const signer = provider.getSigner();
-      console.log("approving")
       await setApprovalForAll(
         leftToken.asset_contract.address,
         ZORA_SWAP,
@@ -298,7 +299,9 @@ const Home = () => {
         type_right === "r_erc20" ? rightToken.address : rightNftToken.asset_contract.address, // buyerTokenAddr 
         type_right === "r_erc20" ? 0 : 
         rightNftToken.token_id, // buyerTokenId 
-        type_right === "r_erc20" ? rightTokenAmount * Math.pow(10, 9) : 0,// buyerTokenAmount 
+        type_right === "r_erc20" ? 
+          BigNumber.from(rightTokenAmount).mul(BigNumber.from(10).pow(rightToken.decimals))
+          : 0,// buyerTokenAmount 
         type_right === "r_erc20" ? 0 : 
         (rightNftToken.asset_contract.schema_name === "ERC1155" ? 1 : 2), // buyerTokenType 
         zoraBalance,
@@ -321,7 +324,6 @@ const Home = () => {
         isClosable: true,
         variant: "top-accent"
       });
-
     }
   }
 
@@ -332,7 +334,7 @@ const Home = () => {
     const network = await ethersProvider._networkPromise;
     if (network.chainId === 1) {
       window.open("https://etherscan.io/address/" + addr);
-    }else if (network.chainId === 4) {
+    } else if (network.chainId === 4) {
       window.open("https://rinkeby.etherscan.io/address/" + addr);
     }
   }
@@ -340,16 +342,34 @@ const Home = () => {
   const loadMoreToken = () => {
     setTokenShowCount(tokenShowCount + 30 > filteredTokenList.length ? filteredTokenList.length : tokenShowCount + 30);
   }
+
+  const isValidCoinAddress = (address) => {
+    return !!address && address.length === 42;
+  }
   
-  const onFilterTextChange = (e) => {
+  const onFilterTextChange = async (e) => {
     setFilterText(e.target.value);
     if (e.target.value) {
+      const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+      const signer = provider.getSigner();
       const fText = e.target.value.toLowerCase();
       const fList = tokenList.filter((item) => {
         return item.address.toLowerCase().indexOf(fText) >= 0 ||
           item.name.toLowerCase().indexOf(fText) >= 0 || 
           item.symbol.toLowerCase().indexOf(fText) >= 0
       });
+      if (fList.length === 0 && isValidCoinAddress(e.target.value)) {
+        let coin = await getCoinInfo(e.target.value, signer);
+        if (coin) {
+          fList.push({
+            name: coin.name,
+            address: coin.address,
+            decimals: coin.decimals,
+            logoURI: "/images/erc20/infinite.svg",
+            symbol: coin.symbol
+          })
+        }
+      }
       setFilteredTokenList(fList);
     } else setFilteredTokenList(tokenList);
   }
@@ -492,7 +512,6 @@ const Home = () => {
     const rightNft = await getNFTDetail(rightNftTokenAddress, rightNftTokenId);
     setRightNftTokenLoading(false);
     if (rightNft.permalink) {
-      console.log("rightNft", rightNft);
       setRightNftToken(rightNft);
     } else {
       toast({

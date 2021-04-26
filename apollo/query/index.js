@@ -2,7 +2,7 @@ import { gql, useQuery } from '@apollo/client';
 
 const SWAP_LISTS = gql`
   query swapListsQuery($first: Int) {
-    swapLists(first: $first) {
+    swapLists(first: $first, orderBy: id, orderDirection: desc) {
       id
       sellerAddr
       sellerTokenAddr

@@ -16,7 +16,6 @@ export async function getURI721(contractAddr, id, signer) {
       }
       return uri;
     } catch(e) {
-        console.log("Error in getToken URI" + e);
         return "";
     }
 }

@@ -6,6 +6,7 @@ import {
     Box,
     Text,
     SimpleGrid,
+    Spinner,
 } from "@chakra-ui/core";
 import {
   SearchIcon,
@@ -17,12 +18,63 @@ const SwapList = () => {
     // define hooks
     const { loading, error, data } = getSwapList(1000);
     const [allSwap, setAllSwap] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     //define functions
     useEffect(() => {
-        console.log("Apollo: ", data);
-        if (data && data.swapLists) setAllSwap(data.swapLists);
+        if (data && data.swapLists) {
+            setAllSwap(data.swapLists);
+            setIsLoaded(true);
+        }
     }, [loading, error, data]);
+
+    const renderList = () => {
+        if (!isLoaded) {
+            return (
+                <Box
+                    boxShadow="0 2px 13px 0 rgba(0, 0, 0, 0.21)"
+                    p="2rem 1rem"
+                    borderBottomRadius="30px"
+                >
+                    <Flex w="100%" flexDirection="row">
+                        <Spinner m="auto"/>
+                    </Flex>
+                </Box>
+            );            
+        }
+        if (allSwap.length === 0) {
+            return (
+                <Box
+                    boxShadow="0 2px 13px 0 rgba(0, 0, 0, 0.21)"
+                    p="2rem 1rem"
+                    borderBottomRadius="30px"
+                >
+                    <Flex w="100%" flexDirection="row">
+                        <Text m="auto">No Data</Text>
+                    </Flex>
+                </Box>
+            );            
+        }
+        return (
+            <Box
+                boxShadow="0 2px 13px 0 rgba(0, 0, 0, 0.21)"
+                p="2rem 1rem"
+                borderBottomRadius="30px"
+            >
+                <Flex flexDirection="row">
+                    <SimpleGrid spacing="1rem" minChildWidth="28rem" w="100%">
+                        {allSwap.map((item, index) => {
+                            return (
+                                <SwapCard swap={item} key={index}/>
+                            )
+                        })}
+                        <Box/>
+                    </SimpleGrid>
+                </Flex>
+            </Box>
+        )
+    }
+
     return (
         <Box w="100%">
             <Box 
@@ -41,22 +93,7 @@ const SwapList = () => {
                     Swap List
                 </Text>
             </Box>
-            <Box
-                boxShadow="0 2px 13px 0 rgba(0, 0, 0, 0.21)"
-                p="2rem 1rem"
-                borderBottomRadius="30px"
-            >
-                <Flex flexDirection="row">
-                    <SimpleGrid spacing="1rem" minChildWidth="28rem" w="100%">
-                        {allSwap.map((item, index) => {
-                            return (
-                                <SwapCard swap={item} key={index}/>
-                            )
-                        })}
-                        <Box/>
-                    </SimpleGrid>
-                </Flex>
-            </Box>
+            {renderList()}
         </Box>
     )
 }

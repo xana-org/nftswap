@@ -36,7 +36,6 @@ const SwapCard = (props) => {
 
     // define functions
     useEffect(async () => {
-        console.log("Swap", swap);
         if (!leftToken) {
             let uri = "";
             if (swap.sellerTokenType === "1")
@@ -157,7 +156,6 @@ const SwapCard = (props) => {
     }
 
     const renderErc20 = (token) => {
-        console.log("ERC20, ", token);
         return (
             <Flex flexDirection="column">
                 <Flex w="12rem" h="100%" p="0.5rem" border="1px solid #ccc" borderRadius="10px" flexDirection="column" justifyContent="center">

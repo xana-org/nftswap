@@ -48,7 +48,6 @@ const Swap = (props) => {
 
     // define functions
     useEffect(async () => {
-        console.log("Swap", swap);
         if (!sellerToken) {
             let uri = "";
             if (swap.sellerTokenType === "1")
