@@ -19,14 +19,20 @@ const SwapList = () => {
     const { loading, error, data } = getSwapList(1000);
     const [allSwap, setAllSwap] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [count, setCount] = useState(0);
 
     //define functions
     useEffect(() => {
         if (data && data.swapLists) {
             setAllSwap(data.swapLists);
+            setCount(Math.min(4, data.swapLists.length));
             setIsLoaded(true);
         }
     }, [loading, error, data]);
+
+    const loadMore = () => {
+        setCount(Math.min(count + 4, allSwap.length));
+    }
 
     const renderList = () => {
         if (!isLoaded) {
@@ -63,7 +69,7 @@ const SwapList = () => {
             >
                 <Flex flexDirection="row">
                     <SimpleGrid spacing="1rem" minChildWidth="28rem" w="100%">
-                        {allSwap.map((item, index) => {
+                        {allSwap.slice(0, count).map((item, index) => {
                             return (
                                 <SwapCard swap={item} key={index}/>
                             )
@@ -71,6 +77,13 @@ const SwapList = () => {
                         <Box/>
                     </SimpleGrid>
                 </Flex>
+                {count < allSwap.length && <Box bg="white" color="blue.900" m="1rem" p="0.5rem" borderRadius="30px"
+                    border="1px solid #6095FF"
+                    cursor="pointer" userSelect="none" onClick={loadMore}
+                    transition="0.3s" _hover={{bg: "blue.800", color: "white"}}
+                >
+                    <Text textAlign="center" fontSize="13px" fontWeight="bold">Load More</Text>
+                </Box>}
             </Box>
         )
     }

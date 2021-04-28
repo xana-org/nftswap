@@ -1,8 +1,6 @@
 import { useEffect, useState }  from "react";
 import { useWallet }            from "use-wallet";
-import axios                    from "axios";
 import { ethers }               from "ethers";
-import { useRouter }            from "next/router";
 import {
     Flex,
     Box,
@@ -10,55 +8,36 @@ import {
     Text,
     Spinner,
     AspectRatio,
-    Spiner,
 } from "@chakra-ui/core";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
 } from "@chakra-ui/icons";
-import { getWalletAddress }     from "../../lib/wallet";
 import { CHAIN }                from "../../constants/addresses";
 import {
     getTokenSymbol,
     getDecimals
 } from "../../contracts/erc20";
-import {
-    getURI1155,
-    getBalance1155
-} from "../../contracts/erc1155";
-import {
-    getURI721,
-    getBalance721
-} from "../../contracts/erc721";
-import {
-    getBalance
-} from "../../contracts/erc20";
+import { getNFTDetail } from "../../opensea/api";
 
 const Swap = (props) => {
     // define hooks
-    const router = useRouter();
     const { swap, buyerBalance, sellerBalance } = props;
     const [buyerToken, setBuyerToken] = useState(null);
     const [sellerToken, setSellerToken] = useState(null);
 
     const wallet = useWallet();
-    const walletAddress = getWalletAddress(wallet);
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const signer = provider.getSigner();
 
     // define functions
     useEffect(async () => {
         if (!sellerToken) {
-            let uri = "";
-            if (swap.sellerTokenType === "1")
-                uri = await getURI1155(swap.sellerTokenAddr, swap.sellerTokenId, signer);
-            else
-                uri = await getURI721(swap.sellerTokenAddr, swap.sellerTokenId, signer);
-            const data = await getMeta(uri);
-            setSellerToken(data);
+            const nftToken = await getNFTDetail(swap.sellerTokenAddr, swap.sellerTokenId);
+            console.log(nftToken);
+            setSellerToken(nftToken);
         }
         if (!buyerToken) {
-            let uri = "";
             if (swap.buyerTokenType === "0") {
                 const symbol = await getTokenSymbol(swap.buyerTokenAddr, signer);
                 const decimals = await getDecimals(swap.buyerTokenAddr, signer);
@@ -71,36 +50,12 @@ const Swap = (props) => {
                 });
             }
             else {
-                try {
-                    if (swap.buyerTokenType === "1")
-                        uri = await getURI1155(swap.buyerTokenAddr, swap.buyerTokenId, signer);
-                    else if (swap.buyerTokenType === "2")
-                        uri = await getURI721(swap.buyerTokenAddr, swap.buyerTokenId, signer);
-                    if (uri)
-                    {
-                        const data = await getMeta(uri);
-                        setBuyerToken(data);
-                    }
-                } catch(e) {}
+                const nftToken = await getNFTDetail(swap.buyerTokenAddr, swap.buyerTokenId);
+                console.log(nftToken);
+                setBuyerToken(nftToken);
             }
         }
     }, []);
-
-    const getMeta = async (url) => {
-        let res = null;
-        if (!url) return res;
-        try {
-            res = await axios.get("https://bswap-ethereum.info/api/v1/meta/image?url=" + url);
-            if (res && res.data) {
-                if (res.data.image.indexOf("ipfs:") >= 0) {
-                    const sps = res.data.image.split('/');
-                    res.data.image = "https://ipfs.io/ipfs/" + sps[sps.length - 2] + '/' + sps[sps.length - 1];
-                }
-                return res.data;
-            }
-        } catch(e) {}
-        return res;
-    }
 
     const openTokenLink = (addr, id) => {
         if (CHAIN === 1) window.open("https://opensea.io/assets/" + addr + "/" + id);
@@ -142,9 +97,9 @@ const Swap = (props) => {
                             />
                         </AspectRatio>:
                         <Image 
-                        height="7rem"
-                        src={nftToken.image}
-                        m="0 auto"
+                            height="7rem"
+                            src={nftToken.image_thumbnail_url}
+                            m="0 auto"
                         />
                     }
                     <Box mt="1rem" mb="0.2rem">

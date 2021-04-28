@@ -22,6 +22,7 @@ import {
     getTokenSymbol,
     getDecimals
 } from "../../contracts/erc20";
+import { getNFTDetail } from "../../opensea/api";
 
 const SwapCard = (props) => {
     // define hooks
@@ -34,19 +35,47 @@ const SwapCard = (props) => {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const signer = provider.getSigner();
 
+    const fetchfromContract = async (addr, id, type) => {
+        let uri = "";
+        try {
+            if (type === "1")
+                uri = await getURI1155(addr, id, signer);
+            else
+                uri = await getURI721(addr, id, signer);
+            const data = await getMeta(uri);
+            return data;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    const fetchfromOpeanSea = async (addr, id) => {
+        try {
+            const data = await getNFTDetail(addr, id);
+            if (data && !data.id) return null;
+            return data;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    const fetchNFT = async (addr, id, type) => {
+        //const data = await fetchfromContract(addr, id, type);
+        //if (data) return data;
+        while (1) {
+            const data = await fetchfromOpeanSea(addr, id);
+            if (data) {
+                return data;
+            }
+        }
+    }
     // define functions
     useEffect(async () => {
         if (!leftToken) {
-            let uri = "";
-            if (swap.sellerTokenType === "1")
-                uri = await getURI1155(swap.sellerTokenAddr, swap.sellerTokenId, signer);
-            else
-                uri = await getURI721(swap.sellerTokenAddr, swap.sellerTokenId, signer);
-            const data = await getMeta(uri);
+            const data = await fetchNFT(swap.sellerTokenAddr, swap.sellerTokenId, swap.sellerTokenType);
             setLeftToken(data);
         }
         if (!rightToken) {
-            let uri = "";
             if (swap.buyerTokenType === "0") {
                 const symbol = await getTokenSymbol(swap.buyerTokenAddr, signer);
                 const decimals = await getDecimals(swap.buyerTokenAddr, signer);
@@ -59,17 +88,8 @@ const SwapCard = (props) => {
                 })
             }
             else {
-                try {
-                    if (swap.buyerTokenType === "1")
-                        uri = await getURI1155(swap.buyerTokenAddr, swap.buyerTokenId, signer);
-                    else if (swap.buyerTokenType === "2")
-                        uri = await getURI721(swap.buyerTokenAddr, swap.buyerTokenId, signer);
-                    if (uri)
-                     {
-                        const data = await getMeta(uri);
-                        setRightToken(data);
-                     }
-                } catch(e) {}
+                const data = await fetchNFT(swap.buyerTokenAddr, swap.buyerTokenId, swap.buyerTokenType);
+                setRightToken(data);
             }
         }
     }, []);
@@ -86,7 +106,9 @@ const SwapCard = (props) => {
                 }
                 return res.data;
             }
-        } catch(e) {}
+        } catch(e) {
+            return null;
+        }
         return res;
     }
 
@@ -127,7 +149,7 @@ const SwapCard = (props) => {
                     </AspectRatio>:
                     <Image 
                       height="7rem"
-                      src={nftToken.image}
+                      src={nftToken.image ? nftToken.image : nftToken.image_thumbnail_url}
                       m="0 auto"
                     />
                 }
