@@ -168,18 +168,21 @@ const Home = () => {
     loadTokens();
   }, []);
 
-  const loadTokens = () => {
+  const loadTokens = async () => {
     setTokenLoading(true);
-    const walletAddress = getWalletAddress(wallet);
-    getAllAssets(walletAddress, tokenOffset, PAGE_SIZE).then(res => {
-        setTokenLoading(false);
-        const newTokens = [...tokenHolders, ...res.assets];
-        setTokenHolders(newTokens);
-        if (res.assets.length < PAGE_SIZE)
-            setTokenOffset(-1);
-        else
-            setTokenOffset(tokenOffset + PAGE_SIZE);
-    });
+    try {
+      const walletAddress = getWalletAddress(wallet);
+      const res = await getAllAssets(walletAddress, tokenOffset, PAGE_SIZE);
+      setTokenLoading(false);
+      const newTokens = [...tokenHolders, ...res.assets];
+      setTokenHolders(newTokens);
+      if (res.assets.length < PAGE_SIZE)
+          setTokenOffset(-1);
+      else
+          setTokenOffset(tokenOffset + PAGE_SIZE);
+    } catch (e) {
+
+    }
   }
 
   const onLoadMore = () => {

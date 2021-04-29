@@ -28,7 +28,7 @@ const Header = () => {
 
     useEffect(() => {
       if (!wallet.ethereum) {
-        wallet.connect("injected");
+        //wallet.connect("injected");
       }
     }, [wallet])
 

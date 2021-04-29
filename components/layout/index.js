@@ -9,6 +9,7 @@ import NoConnection           from "./NoConnection";
 import useDidMount            from "../../hooks/useDidMount";
 import { scrollToPosition }   from "../../lib/scroll";
 import { isWalletConnected }  from "../../lib/wallet";
+import { UseWalletProvider }  from "use-wallet";
 
 const Layout = ({ children }) => {
     const didMount = useDidMount();

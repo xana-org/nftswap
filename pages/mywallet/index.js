@@ -29,9 +29,10 @@ const MyWallet = () => {
         loadTokens();
     }, []);
 
-    const loadTokens = () => {
+    const loadTokens = async () => {
         setTokenLoading(true);
-        getAllAssets(walletAddress, tokenOffset, PAGE_SIZE).then(res => {
+        try {
+            const res = await getAllAssets(walletAddress, tokenOffset, PAGE_SIZE);
             setTokenLoading(false);
             const newTokens = [...tokenHolders, ...res.assets];
             setTokenHolders(newTokens);
@@ -39,7 +40,9 @@ const MyWallet = () => {
                 setTokenOffset(-1);
             else
                 setTokenOffset(tokenOffset + PAGE_SIZE);
-        });
+        } catch (e) {
+            
+        }
     }
 
     const onLoadMore = () => {
