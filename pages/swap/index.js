@@ -56,8 +56,8 @@ const SwapPage = () => {
 
     const wallet = useWallet();
     const walletAddress = getWalletAddress(wallet);
-    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const signer = provider.getSigner();
+    const provider = walletAddress ? new ethers.providers.Web3Provider(wallet.ethereum) : null;
+    const signer = provider?.getSigner();
 
     // define functions
     useEffect(() => {

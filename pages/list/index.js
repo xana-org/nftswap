@@ -16,6 +16,7 @@ import SwapCard from "../../components/swapcard";
 
 const SwapList = () => {
     // define hooks
+    const wallet = useWallet();
     const { loading, error, data } = getSwapList(1000);
     const [allSwap, setAllSwap] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -35,6 +36,17 @@ const SwapList = () => {
     }
 
     const renderList = () => {
+        if (!wallet.ethereum) return (
+            <Box
+                boxShadow="0 2px 13px 0 rgba(0, 0, 0, 0.21)"
+                p="2rem 1rem"
+                borderBottomRadius="30px"
+            >
+                <Flex w="100%" flexDirection="row">
+                    <Spinner m="auto"/>
+                </Flex>
+            </Box>
+        );
         if (!isLoaded) {
             return (
                 <Box

@@ -1,22 +1,22 @@
 import { Box, Text } from "@chakra-ui/core";
 const NoConnection = () => {
     return (        
-        <Box w="100%"
-        p="2rem 1rem">
+        <Box w="100%" p="0rem 1rem">
             <Box 
                 w="100%"
                 bg="yellow.900"
                 color="white"
-                p="2rem 1rem"
+                p="1rem 1rem"
                 borderRadius="20px"
+                mb="1rem"
             >
                 <Text
                     textAlign="center"
-                    fontSize="30px"
+                    fontSize="20px"
                     fontWeight="bold"
                     color="black"
                 >
-                    Your wallet is not connected.
+                    Please connect Rinkey network.
                 </Text>
             </Box>
         </Box>

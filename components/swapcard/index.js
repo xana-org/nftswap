@@ -32,8 +32,8 @@ const SwapCard = (props) => {
     const [rightToken, setRightToken] = useState(null);
     const [isInvalid, setIsInvalid] = useState(false);
     const wallet = useWallet();
-    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const signer = provider.getSigner();
+    const provider = wallet.ethereum?new ethers.providers.Web3Provider(wallet.ethereum):null;
+    const signer = provider?.getSigner();
 
     const fetchfromContract = async (addr, id, type) => {
         let uri = "";
