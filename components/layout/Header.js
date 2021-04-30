@@ -1,14 +1,8 @@
-import { useEffect, useState, useContext } from "react";
-import { useRouter } from 'next/router';
+import { useEffect, useState } from "react";
 import { useWallet } from "use-wallet";
-import axios from "axios";
-import { ethers } from "ethers";
 import {
   getWalletConnectionStatus,
   isWalletConnected,
-  disconnectWallet,
-  getWalletAddress,
-  shortenWalletAddress,
 } from "../../lib/wallet";
 import ConnectModal from "../modals/ConnectModal";
 import {NavBarContainer} from "./NavBarContainer";
@@ -24,13 +18,13 @@ const Header = () => {
 
     useEffect(() => {
       wallet.connect("injected");
-    }, [])
+    }, []);
 
-    useEffect(() => {
-      if (!wallet.ethereum) {
-        //wallet.connect("injected");
-      }
-    }, [wallet])
+    // useEffect(() => {
+    //   if (!wallet.ethereum) {
+    //     wallet.connect("injected");
+    //   }
+    // }, [wallet])
 
     useEffect(() => {
         const currentConnectionStatus = getWalletConnectionStatus(wallet);

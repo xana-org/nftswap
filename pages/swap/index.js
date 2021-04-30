@@ -11,7 +11,6 @@ import {
     NumberInput,
     NumberInputField,
     useToast,
-    SimpleGrid,
 } from "@chakra-ui/core";
 import { getSwap }              from "../../apollo/query";
 import Swap                     from "../../components/swap";
@@ -56,16 +55,24 @@ const SwapPage = () => {
 
     const wallet = useWallet();
     const walletAddress = getWalletAddress(wallet);
-    const provider = walletAddress ? new ethers.providers.Web3Provider(wallet.ethereum) : null;
+    const provider = walletAddress && wallet.ethereum ? new ethers.providers.Web3Provider(wallet.ethereum) : null;
     const signer = provider?.getSigner();
 
     // define functions
     useEffect(() => {
         if (!swapId) router.push("/");
-
+        if (!provider || !signer) router.push("/");
     }, []);
 
     useEffect(async () => {
+        if (!swapId) {
+            router.push("/");
+            return;
+        }
+        if (!provider || !signer) {
+            router.push("/");
+            return;
+        }
         if (data && data.swapLists && data.swapLists.length) {
             setSwap(data.swapLists[0]);
             const swap = data.swapLists[0];
@@ -96,7 +103,6 @@ const SwapPage = () => {
         if (scoreLoading === 1) return;
         try {
             const res = await Axios.get("https://zora.cc/rating/" + address);
-            console.log(res);
             if (res && res.data && res.data.status) {
                 setScoreLoading(1);
                 setCreditScore(res.data.result);
@@ -281,62 +287,65 @@ const SwapPage = () => {
                 </Flex>
             )
         }
-        console.log(creditScore);
-        const tList = [];
-        for ( const item in creditScore.extra) {
-            console.log(item);
-            if (item !== "max" && item !== "portfolio" &&  item !== "eth")
-                tList.push({
-                    name: item,
-                    data: creditScore.extra[item]
-                });
-        }
         return (
-            <Flex flexDirection="column" w="100%" mt="1rem">
-                <SimpleGrid spacing="1rem" minChildWidth="15rem" w="100%">
-                    <Box border="1px solid #4F5494" borderRadius="5px" p="1rem">
-                        <Flex flexDirection="row">
-                            <Text fontWeight="bold" fontSize="14px" mr="0.5rem">Age: </Text>
-                            <Text fontSize="14px">{creditScore.age}</Text>
-                        </Flex>
-                        <Flex flexDirection="row">
-                            <Text fontWeight="bold" fontSize="14px" mr="0.5rem">Eth balance: </Text>
-                            <Text fontSize="14px">{parseFloat(creditScore.ethBalance).toFixed(4)} ETH</Text>
-                        </Flex>
-                        <Flex flexDirection="row">
-                            <Text fontWeight="bold" fontSize="14px" mr="0.5rem">Max GWEI: </Text>
-                            <Text fontSize="14px">{parseFloat(creditScore.maxGwei).toFixed(4)}</Text>
-                        </Flex>
-                        <Flex flexDirection="row">
-                            <Text fontWeight="bold" fontSize="14px" mr="0.5rem">Mac Nounce: </Text>
-                            <Text fontSize="14px">{creditScore.maxNonce}</Text>
-                        </Flex>
-                        <Flex flexDirection="row">
-                            <Text fontWeight="bold" fontSize="14px" mr="0.5rem">Total Gas Spent: </Text>
-                            <Text fontSize="14px">{parseFloat(creditScore.totalGasSpent).toFixed(4)}</Text>
-                        </Flex>
-                        <Flex flexDirection="row">
-                            <Text fontWeight="bold" fontSize="14px" mr="0.5rem">Tx Count: </Text>
-                            <Text fontSize="14px">{creditScore.txCount}</Text>
-                        </Flex>
-                    </Box>
-                    {tList.map((item, index) => {
-                        return (
-                            <Box key={index} border="1px solid #ccc" borderRadius="5px" p="1rem">
-                                <Text fontWeight="bold">{item.name}</Text>
-                                <Text fontSize="13px" color="#333">Sent: {parseFloat(item.data.sent).toFixed(4)}</Text>
-                                <Text fontSize="13px" color="#333">Received: {parseFloat(item.data.received).toFixed(4)}</Text>
-                                <Text fontSize="13px" color="#333">Trading: {parseFloat(item.data.trading).toFixed(4)}</Text>
-                                <Text fontSize="13px" color="#333">
-                                    Fee: 
-                                    ETH {parseFloat(item.data.exchangefee.ETH).toFixed(2)} / USD {parseFloat(item.data.exchangefee.USD).toFixed(2)}
-                                </Text>
-                            </Box>
-                        )
-                    })}
-                </SimpleGrid>
+            <Flex flexDirection="row" justifyContent="center">
+                <Text fontSize="40px" fontWeight="bold" color="#555">{creditScore.rating}</Text>
             </Flex>
         )
+        // for ( const item in creditScore.extra) {
+        //     console.log(item);
+        //     if (item !== "max" && item !== "portfolio" &&  item !== "eth")
+        //         tList.push({
+        //             name: item,
+        //             data: creditScore.extra[item]
+        //         });
+        // }
+        // return (
+        //     <Flex flexDirection="column" w="100%" mt="1rem">
+        //         <SimpleGrid spacing="1rem" minChildWidth="15rem" w="100%">
+        //             <Box border="1px solid #4F5494" borderRadius="5px" p="1rem">
+        //                 <Flex flexDirection="row">
+        //                     <Text fontWeight="bold" fontSize="14px" mr="0.5rem">Age: </Text>
+        //                     <Text fontSize="14px">{creditScore.age}</Text>
+        //                 </Flex>
+        //                 <Flex flexDirection="row">
+        //                     <Text fontWeight="bold" fontSize="14px" mr="0.5rem">Eth balance: </Text>
+        //                     <Text fontSize="14px">{parseFloat(creditScore.ethBalance).toFixed(4)} ETH</Text>
+        //                 </Flex>
+        //                 <Flex flexDirection="row">
+        //                     <Text fontWeight="bold" fontSize="14px" mr="0.5rem">Max GWEI: </Text>
+        //                     <Text fontSize="14px">{parseFloat(creditScore.maxGwei).toFixed(4)}</Text>
+        //                 </Flex>
+        //                 <Flex flexDirection="row">
+        //                     <Text fontWeight="bold" fontSize="14px" mr="0.5rem">Mac Nounce: </Text>
+        //                     <Text fontSize="14px">{creditScore.maxNonce}</Text>
+        //                 </Flex>
+        //                 <Flex flexDirection="row">
+        //                     <Text fontWeight="bold" fontSize="14px" mr="0.5rem">Total Gas Spent: </Text>
+        //                     <Text fontSize="14px">{parseFloat(creditScore.totalGasSpent).toFixed(4)}</Text>
+        //                 </Flex>
+        //                 <Flex flexDirection="row">
+        //                     <Text fontWeight="bold" fontSize="14px" mr="0.5rem">Tx Count: </Text>
+        //                     <Text fontSize="14px">{creditScore.txCount}</Text>
+        //                 </Flex>
+        //             </Box>
+        //             {tList.map((item, index) => {
+        //                 return (
+        //                     <Box key={index} border="1px solid #ccc" borderRadius="5px" p="1rem">
+        //                         <Text fontWeight="bold">{item.name}</Text>
+        //                         <Text fontSize="13px" color="#333">Sent: {parseFloat(item.data.sent).toFixed(4)}</Text>
+        //                         <Text fontSize="13px" color="#333">Received: {parseFloat(item.data.received).toFixed(4)}</Text>
+        //                         <Text fontSize="13px" color="#333">Trading: {parseFloat(item.data.trading).toFixed(4)}</Text>
+        //                         <Text fontSize="13px" color="#333">
+        //                             Fee: 
+        //                             ETH {parseFloat(item.data.exchangefee.ETH).toFixed(2)} / USD {parseFloat(item.data.exchangefee.USD).toFixed(2)}
+        //                         </Text>
+        //                     </Box>
+        //                 )
+        //             })}
+        //         </SimpleGrid>
+        //     </Flex>
+        // )
     }
 
     return (
@@ -421,8 +430,8 @@ const SwapPage = () => {
                     }
                 </Flex>
                 <Box width="100%" height="1px" bg="#ccc" m="2rem 0 1rem 0"/>
-                <Text fontWeight="bold" color="#444" textAlign="center">Zoracles Credit Score</Text>
                 <Text fontSize="13px" color="#444" textAlign="center" m="0.5rem 0">Created by: {creator}</Text>
+                <Text fontWeight="bold" color="#444" textAlign="center">Zora Score</Text>
                 {renderZoraScore()}
             </Box>
         </Box>

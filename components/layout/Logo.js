@@ -1,18 +1,10 @@
 import React from "react"
-import { Box, Text } from "@chakra-ui/core"
+import { Box, Image } from "@chakra-ui/core"
  
 export default function Logo(props) {
   return (
     <Box {...props}>
-        <Text
-            m="auto 0"
-            fontWeight="bold"
-            fontSize="18px"
-            color="black"
-            minW="300px"
-        >
-            Zoracles - NFTSwap
-        </Text>
+        <Image src="/images/logo.svg" maxW="200px"/>
     </Box>
   )
 }

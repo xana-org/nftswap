@@ -30,11 +30,46 @@ const Swap = (props) => {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const signer = provider.getSigner();
 
+
+    const fetchfromContract = async (addr, id, type) => {
+        let uri = "";
+        try {
+            if (type === "1")
+                uri = await getURI1155(addr, id, signer);
+            else
+                uri = await getURI721(addr, id, signer);
+            const data = await getMeta(uri);
+            return data;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    const fetchfromOpeanSea = async (addr, id) => {
+        try {
+            const data = await getNFTDetail(addr, id);
+            if (data && !data.id) return null;
+            return data;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    const fetchNFT = async (addr, id, type) => {
+        //const data = await fetchfromContract(addr, id, type);
+        //if (data) return data;
+        while (1) {
+            const data = await fetchfromOpeanSea(addr, id);
+            if (data) {
+                return data;
+            }
+        }
+    }
+
     // define functions
     useEffect(async () => {
         if (!sellerToken) {
-            const nftToken = await getNFTDetail(swap.sellerTokenAddr, swap.sellerTokenId);
-            console.log(nftToken);
+            const nftToken = await fetchNFT(swap.sellerTokenAddr, swap.sellerTokenId, swap.sellerTokenType);
             setSellerToken(nftToken);
         }
         if (!buyerToken) {
@@ -50,8 +85,7 @@ const Swap = (props) => {
                 });
             }
             else {
-                const nftToken = await getNFTDetail(swap.buyerTokenAddr, swap.buyerTokenId);
-                console.log(nftToken);
+                const nftToken = await fetchNFT(swap.buyerTokenAddr, swap.buyerTokenId, swap.buyerTokenType);
                 setBuyerToken(nftToken);
             }
         }
